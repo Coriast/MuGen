@@ -6,7 +6,7 @@ static class Program
 	[STAThread]
 	static void Main(string[] args)
 	{
-		MuGen.MuGen game = new MuGen.MuGen();
+		MuGen.Source.MuGen game = new MuGen.Source.MuGen();
 		game.Run();
 	}
 }
