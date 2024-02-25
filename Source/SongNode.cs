@@ -8,7 +8,6 @@ using System.Windows.Media.Imaging;
 namespace MuGen.Source;
 public class SongNode
 {
-    public static Texture2D bgTexture { get; set; }
     public static SpriteFont font { get; set; }
     public Rectangle onScreen { get; set; }
     public string name { get; set; }
@@ -38,9 +37,12 @@ public class SongNode
 
     public void Update()
     {
-        if (Mouse.GetState().LeftButton == ButtonState.Pressed && _oldState.LeftButton == ButtonState.Released)
+		if (_selected)
+			audio.Spectrum();
+
+		if (Mouse.GetState().LeftButton == ButtonState.Pressed && _oldState.LeftButton == ButtonState.Released)
         {
-            if (checkMouseCollision(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)))
+            if (CheckMouseCollision(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)))
             {
                 if (!_fileLoaded)
                 {
@@ -53,7 +55,7 @@ public class SongNode
         }
         _oldState = Mouse.GetState();
 
-        if (checkMouseCollision(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)))
+        if (CheckMouseCollision(new Vector2(Mouse.GetState().X, Mouse.GetState().Y)))
         {
             _mouseHover = true;
             _opacity = 1.0f;
@@ -85,7 +87,7 @@ public class SongNode
 
     public void DrawBackground()
     {
-        Globals.SpriteBatch.Draw(bgTexture, onScreen, _selected ? Color.Azure : Color.White * _opacity);
+        Globals.SpriteBatch.Draw(Globals.BasicTexture, onScreen, _selected ? Color.Azure : Color.White * _opacity);
     }
 
     public void DrawText()
@@ -95,7 +97,7 @@ public class SongNode
         SongList.TextSpriteBatch.DrawString(font, name, _bufferPosition, Color.Black);
     }
 
-    public bool checkMouseCollision(Vector2 point)
+    public bool CheckMouseCollision(Vector2 point)
     {
         if (point.X >= onScreen.X && point.Y >= onScreen.Y &&
             point.X <= onScreen.X + onScreen.Width && point.Y <= onScreen.Y + onScreen.Height)
@@ -109,11 +111,16 @@ public class SongNode
     {
         _selected = true;
         audio.Play();
-    }
+	}
 
     public void Stop()
     {
         _selected = false;
         audio.Stop();
+    }
+
+    public float[] GetSpectrum()
+    {
+        return audio.GetSpectrumSample();
     }
 }

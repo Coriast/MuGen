@@ -52,7 +52,7 @@ public class MuGen : Game
         _folder.texture = Content.Load<Texture2D>("folder-icon");
         _folder.onScreen = new Rectangle(GraphicsDevice.Viewport.Width - 80, GraphicsDevice.Viewport.Height - 80, 70, 70);
 
-        SongNode.bgTexture = Content.Load<Texture2D>("song-bg");
+        Globals.BasicTexture = Content.Load<Texture2D>("song-bg");
         SongNode.font = Content.Load<SpriteFont>("textFont");
     }
 
@@ -91,8 +91,9 @@ public class MuGen : Game
         GraphicsDevice.Clear(Color.Silver);
 
         Globals.SpriteBatch.Begin();
-        Globals.SpriteBatch.Draw(_folder.texture, _folder.onScreen, _folder.texture.Bounds, Color.White);
-        SongList.DrawBackground();
+            Globals.SpriteBatch.Draw(_folder.texture, _folder.onScreen, _folder.texture.Bounds, Color.White);
+            SongList.Draw();
+
         Globals.SpriteBatch.End();
 
         SongList.DrawText();
